@@ -1,0 +1,59 @@
+
+import React, { useEffect, useState } from 'react';
+
+function AISummary({ surgicalCase, onClose }) {
+    const [summary, setSummary] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Simulate API call to GPT-4 (replace with actual API)
+    useEffect(() => {
+        const generateSummary = async () => {
+            setIsLoading(true);
+
+            // In a real app: const response = await fetchAISummary(surgicalCase);
+            try {
+                const response = await fetch("http://91.108.112.45:4000", {
+                    method: "POST", headers: { "x-litellm-api-key": "sk-uOUPzge98Gq7A2U5FcB6sQ", "Content-Type": "Application/json" },
+                    body: JSON.stringify({
+                        model: "gpt-4-turbo", messages: [
+                            {
+                                role: "user", content: `Summarize the following surgical case: \nDiagnosis: surgicalCase.diagnosis, Patient ID: surgicalCase.patientId, Procedure: {surgicalCase.procedure}, Complications: ${surgicalCase.complications || "None"}`
+                            }
+
+                        ]
+                    })
+                });
+
+                const data = await response.json();
+                setSummary(data.choices[0].message.content);
+            } catch (err) {
+                console.error(err);
+                setSummary("Error generating summary. Please try again.");
+            }
+            setIsLoading(false);
+        };
+        generateSummary();
+    }, [surgicalCase]);
+
+
+
+
+
+    return (
+        <div className="ai-summary-modal">
+            <div className="ai-summary-content">
+                <h2>AI-Generated Summary</h2>
+
+                {isLoading ? (
+                    <p>Generating summary...</p>
+                ) : (
+                    <div dangerouslySetInnerHTML={{ __html: summary }} />
+                )}
+
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    );
+}
+
+export default AISummary;

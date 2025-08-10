@@ -1,0 +1,33 @@
+
+import React from 'react';
+
+function CaseTable({ cases }) {
+    return (
+        <table className="cases-table">
+            <thead>
+                <tr>
+                    <th>Case ID</th>
+                    <th>Patient ID</th>
+                    <th>Diagnosis</th>
+                    <th>Procedure</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {cases.map((surgicalCase) => (
+                    <tr key={surgicalCase.id}>
+                        <td>{surgicalCase.id}</td>
+                        <td>{surgicalCase.patientId}</td>
+                        <td>{surgicalCase.diagnosis}</td>
+                        <td>{surgicalCase.procedure}</td>
+                        <td>{surgicalCase.status}</td>
+                        <td>{new Date(surgicalCase.createdAt).toLocaleDateString()}</td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
+
+export default CaseTable;
