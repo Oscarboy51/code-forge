@@ -1,0 +1,18 @@
+
+import React from 'react';
+import CaseTable from './CaseTable';
+
+function Dashboard({ cases }) {
+    return (
+        <div className="dashboard">
+            <h2>Recent Cases</h2>
+            {cases.length > 0 ? (
+                <CaseTable cases={cases} />
+            ) : (
+                <p>No cases found. Start by adding a new case.</p>
+            )}
+        </div>
+    );
+}
+
+export default Dashboard;
